@@ -36,7 +36,7 @@ namespace Kmd.Logic.Consumption.Client
         public void Record(Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset consumedDatetime, string reason = null)
         {
             string propertyName = string.Empty;
-            this._destination.Write(propertyName, subscriptionId, resourceId, meter, amount, consumedDatetime, reason);
+            this._destination.Write(subscriptionId, resourceId, meter, amount, consumedDatetime, reason);
         }
     }
 }

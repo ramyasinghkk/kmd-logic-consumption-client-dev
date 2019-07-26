@@ -34,23 +34,25 @@ namespace Kmd.Logic.Consumption.Client.AuditClient
 
         public void Write(Guid subscriptionId, Guid resourceId, string meter, int amount, string reason = null)
         {
-            var audit = reason == null
-                        ? this._audit
-                        : this._audit.ForContext("Reason", reason);
-
-            audit.Write(
-                Template,
-                amount,
-                meter,
-                resourceId,
-                subscriptionId);
+            this.Write(
+                subscriptionId: subscriptionId,
+                resourceId: resourceId,
+                meter: meter,
+                amount: amount,
+                logConsumedDatetime: DateTimeOffset.Now,
+                reason: reason);
         }
 
-        public void Write(string propertyName, Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset logConsumedDatetime, string reason = null)
+        public void Write(Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset logConsumedDatetime, string reason = null)
         {
             var audit = reason == null
                        ? this._audit
-                       : this._audit.ForContext(this._getSubOwnerContextName(propertyName), reason);
+                       : this._audit.ForContext(this._getSubOwnerContextName("Reason"), reason);
+
+            audit = logConsumedDatetime == null
+                      ? audit
+                      : audit.ForContext(this._getSubOwnerContextName("LogConsumedDatetime"), logConsumedDatetime);
+
             audit.Write(
                 Template,
                 amount,
