@@ -12,6 +12,6 @@ namespace Kmd.Logic.Consumption.Client.Sample
 
         public string Reason { get; set; } = "Just testing";
 
-        public DateTimeOffset ConsumedDateTime {get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset ConsumedDateTime { get; set; } = DateTimeOffset.UtcNow;
     }
 }

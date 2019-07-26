@@ -65,7 +65,7 @@ namespace Kmd.Logic.Consumption.Client.Sample
                             eventHubsTopic: eventHubsTopic,
                             eventHubsHost: $"{eventHubsHost}",
                             meterData: config.MeterData,
-                            consumedDateTime: DateTimeOffset.UtcNow,
+                            consumedDateTime: DateTimeOffset.Now,
                             consumedAmountData: config.ConsumedAmountData);
                         break;
                     default:
