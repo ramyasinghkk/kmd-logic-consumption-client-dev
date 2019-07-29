@@ -5,7 +5,7 @@ namespace Kmd.Logic.Consumption.Client.AuditClient
 {
     public class AuditClientConsumptionMetricsDestination : IConsumptionMetricsDestination
     {
-        public static string Template { get; } = "Consumed {Amount} for {Meter} on resource {ResourceId} in subscription {SubscriptionId}";
+        public static string Template { get; } = "Consumed {Amount} for {Meter} on resource {ResourceId} in subscription {SubscriptionId} recorded DateTime {ConsumedDatetime}";
 
         public static string GetDefaultSubOwnerContextName(string propertyName) => $"__Sub_{propertyName}";
 
@@ -39,19 +39,19 @@ namespace Kmd.Logic.Consumption.Client.AuditClient
                 resourceId: resourceId,
                 meter: meter,
                 amount: amount,
-                ConsumedDatetime: DateTimeOffset.Now,
+                consumedDatetime: DateTimeOffset.Now,
                 reason: reason);
         }
 
-        public void Write(Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset ConsumedDatetime, string reason = null)
+        public void Write(Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset consumedDatetime, string reason = null)
         {
             var audit = reason == null
                        ? this._audit
                        : this._audit.ForContext(this._getSubOwnerContextName("Reason"), reason);
 
-            audit = ConsumedDatetime == null
+            audit = consumedDatetime == null
                       ? audit
-                      : audit.ForContext(this._getSubOwnerContextName("LogConsumedDatetime"), ConsumedDatetime);
+                      : audit.ForContext(this._getSubOwnerContextName("LogConsumedDatetime"), consumedDatetime);
 
             audit.Write(
                 Template,
@@ -59,7 +59,7 @@ namespace Kmd.Logic.Consumption.Client.AuditClient
                 meter,
                 resourceId,
                 subscriptionId,
-                ConsumedDatetime);
+                consumedDatetime);
         }
     }
 }
