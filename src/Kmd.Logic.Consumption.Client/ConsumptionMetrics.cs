@@ -35,7 +35,6 @@ namespace Kmd.Logic.Consumption.Client
         // overloaded record to log date time 
         public void Record(Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset consumedDatetime, string reason = null)
         {
-            string propertyName = string.Empty;
             this._destination.Write(subscriptionId, resourceId, meter, amount, consumedDatetime, reason);
         }
     }

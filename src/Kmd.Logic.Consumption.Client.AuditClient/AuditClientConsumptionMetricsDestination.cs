@@ -39,19 +39,19 @@ namespace Kmd.Logic.Consumption.Client.AuditClient
                 resourceId: resourceId,
                 meter: meter,
                 amount: amount,
-                logConsumedDatetime: DateTimeOffset.Now,
+                ConsumedDatetime: DateTimeOffset.Now,
                 reason: reason);
         }
 
-        public void Write(Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset logConsumedDatetime, string reason = null)
+        public void Write(Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset ConsumedDatetime, string reason = null)
         {
             var audit = reason == null
                        ? this._audit
                        : this._audit.ForContext(this._getSubOwnerContextName("Reason"), reason);
 
-            audit = logConsumedDatetime == null
+            audit = ConsumedDatetime == null
                       ? audit
-                      : audit.ForContext(this._getSubOwnerContextName("LogConsumedDatetime"), logConsumedDatetime);
+                      : audit.ForContext(this._getSubOwnerContextName("LogConsumedDatetime"), ConsumedDatetime);
 
             audit.Write(
                 Template,
@@ -59,7 +59,7 @@ namespace Kmd.Logic.Consumption.Client.AuditClient
                 meter,
                 resourceId,
                 subscriptionId,
-                logConsumedDatetime);
+                ConsumedDatetime);
         }
     }
 }
