@@ -144,7 +144,7 @@ namespace Kmd.Logic.Consumption.Client.Tests
         public void TheDefaultTemplateIsCorrect()
         {
             AuditClientConsumptionMetricsDestination.Template.Should()
-                .Be("Consumed {Amount} for {Meter} on resource {ResourceId} in subscription {SubscriptionId}");
+                .Be("Consumed {Amount} for {Meter} on resource {ResourceId} in subscription {SubscriptionId} recorded DateTime {ConsumedDatetime}");
         }
 
         [Theory]

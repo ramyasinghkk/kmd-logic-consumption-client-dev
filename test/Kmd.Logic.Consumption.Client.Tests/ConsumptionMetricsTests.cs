@@ -16,7 +16,6 @@ namespace Kmd.Logic.Consumption.Client.Tests
             string meter,
             int amount,
             string reason,
-            DateTimeOffset consumeDateTime,
             IDictionary<string, string> internalContext,
             IDictionary<string, string> subOwnerContext)
         {
@@ -39,7 +38,6 @@ namespace Kmd.Logic.Consumption.Client.Tests
             var capturedMeter = default(string);
             var capturedAmount = default(int);
             var capturedReason = default(string);
-            var capturedDatetime = default(DateTimeOffset);
             mockedDestination
                 .Setup(d => d.Write(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>()))
                 .Callback((Guid callbackSubscriptionId, Guid callbackResourceId, string callbackMeter, int callbackAmount, string callbackReason) =>
@@ -50,7 +48,7 @@ namespace Kmd.Logic.Consumption.Client.Tests
             consumption = internalContext?.Aggregate(consumption, (client, kvp) => client.ForInternalContext(kvp.Key, kvp.Value)) ?? consumption;
             consumption = subOwnerContext?.Aggregate(consumption, (client, kvp) => client.ForSubscriptionOwnerContext(kvp.Key, kvp.Value)) ?? consumption;
 
-            consumption.Record(subscriptionId, resourceId, meter, amount, consumeDateTime, reason);
+            consumption.Record(subscriptionId, resourceId, meter, amount, reason);
 
             return new ConsumptionMetricsDestinationRecord(
                 subscriptionId: capturedSubscriptionId,
@@ -58,7 +56,6 @@ namespace Kmd.Logic.Consumption.Client.Tests
                 meter: capturedMeter,
                 amount: capturedAmount,
                 reason: capturedReason,
-                consumedDatetime: capturedDatetime,
                 internalContext: capturedInternalContext,
                 subscriptionOwnerContext: capturedSubOwnerContext);
         }
@@ -78,13 +75,12 @@ namespace Kmd.Logic.Consumption.Client.Tests
             var subOwnerContext = new Dictionary<string, string> { { $"{Guid.NewGuid()}", $"{Guid.NewGuid()}" } };
 
             // Act
-            var result = this.CaptureDestinationRecord(
+            var result = CaptureDestinationRecord(
                     subscriptionId: subscriptionId,
                     resourceId: resourceId,
                     meter: meter,
                     amount: amount,
                     reason: reason,
-                    consumedDateTime: consumedDatetime,
                     internalContext: internalContext,
                     subOwnerContext: subOwnerContext);
 
@@ -96,14 +92,8 @@ namespace Kmd.Logic.Consumption.Client.Tests
                     meter,
                     amount,
                     reason,
-                    consumedDatetime,
                     internalContext,
                     subOwnerContext));
-        }
-
-        private object CaptureDestinationRecord(Guid subscriptionId, Guid resourceId, string meter, int amount, DateTimeOffset consumedDateTime, string reason, Dictionary<string, string> internalContext, Dictionary<string, string> subOwnerContext)
-        {
-            throw new NotImplementedException();
         }
     }
 }
