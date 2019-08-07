@@ -6,7 +6,7 @@ namespace Kmd.Logic.Consumption.Client.Sample
     {
         public string ResourceType { get; set; } = "SMS Provider";
 
-        public string ResourceName { get; set; } = "FRIE PROD";
+        public string ResourceName { get; set; } = "FRIE PRODo";
 
         public int Amount { get; set; } = 1;
 
